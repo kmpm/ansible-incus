@@ -34,24 +34,24 @@ options:
     project:
         description:
           - 'Project of an instance.
-            See U(https://documentation.ubuntu.com/lxd/en/latest/projects/).'
+            See U(https://linuxcontainers.org/incus/docs/main/projects/).'
         required: false
         type: str
         version_added: 4.8.0
     architecture:
         description:
           - 'The architecture for the instance (for example V(x86_64) or V(i686)).
-            See U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get).'
+            See U(https://linuxcontainers.org/incus/docs/main/rest-api-spec/#/instances/instances_get).'
         type: str
         required: false
     config:
         description:
           - 'The config for the instance (for example V({"limits.cpu": "2"})).
-            See U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get).'
+            See U(https://linuxcontainers.org/incus/docs/main/rest-api-spec/#/instances/instance_get).'
           - If the instance already exists and its "config" values in metadata
-            obtained from the Incus API U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get)
+            obtained from the Incus API U(https://linuxcontainers.org/incus/docs/main/rest-api-spec/#/instances/instance_get)
             are different, then this module tries to apply the configurations
-            U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_put).
+            U(https://linuxcontainers.org/incus/docs/main/rest-api-spec/#/instances/instance_put).
           - The keys starting with C(volatile.) are ignored for this comparison when O(ignore_volatile_options=true).
         type: dict
         required: false
@@ -74,13 +74,13 @@ options:
         description:
           - 'The devices for the instance
             (for example V({ "rootfs": { "path": "/dev/kvm", "type": "unix-char" }})).
-            See U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get).'
+            See U(https://linuxcontainers.org/incus/docs/main/rest-api-spec/#/instances/instance_get).'
         type: dict
         required: false
     ephemeral:
         description:
           - Whether or not the instance is ephemeral (for example V(true) or V(false)).
-            See U(https://documentation.ubuntu.com/lxd/en/latest/api/#/instances/instance_get).
+            See U(https://linuxcontainers.org/incus/docs/main/rest-api-spec/#/instances/instance_get).
         required: false
         type: bool
     source:
@@ -88,7 +88,7 @@ options:
           - 'The source for the instance
             (for example V({ "type": "image", "mode": "pull", "server": "https://images.linuxcontainers.org",
             "protocol": "lxd", "alias": "ubuntu/xenial/amd64" })).'
-          - 'See U(https://documentation.ubuntu.com/lxd/en/latest/api/) for complete API documentation.'
+          - 'See U(https://linuxcontainers.org/incus/docs/main/rest-api/) for complete API documentation.'
           - 'Note that C(protocol) accepts two choices: V(lxd) or V(simplestreams).'
         required: false
         type: dict
@@ -485,16 +485,7 @@ class IncusContainerManagement(object):
         except IncusClientException as e:
             self.module.fail_json(msg=e.msg)
 
-        # Incus (3.19) Rest API provides instances endpoint, failback to containers and virtual-machines
-        # https://documentation.ubuntu.com/lxd/en/latest/rest-api/#instances-containers-and-virtual-machines
         self.api_endpoint = '/1.0/instances'
-        check_api_endpoint = self.client.do('GET', '{0}?project='.format(self.api_endpoint), ok_error_codes=[404])
-        
-        if check_api_endpoint['error_code'] == 404:
-            if self.type == 'container':
-                self.api_endpoint = '/1.0/containers'
-            elif self.type == 'virtual-machine':
-                self.api_endpoint = '/1.0/virtual-machines'
 
         self.trust_password = self.module.params.get('trust_password', None)
         self.actions = []
