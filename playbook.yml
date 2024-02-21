@@ -1,0 +1,32 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    - package_to_install: python3
+  tasks: 
+    - name: create container
+      incus_container:
+        name: mycontainer
+        source: 
+          type: image
+          alias: debian/12/cloud
+          server: "https://images.linuxcontainers.org"
+          protocol: "simplestreams"
+          mode: "pull"
+          allow_inconsistent: false
+
+    - name: "check if {{ package_to_install }} is installed in container"
+      delegate_to: mycontainer
+      ansible.builtin.raw: "dpkg -s {{ package_to_install }}"
+      register: pkg_install_check
+      failed_when: pkg_install_check.rc not in [0, 1]
+      changed_when: false
+
+    - name: "install {{ package_to_install }} in container"
+      delegate_to: mycontainer
+      ansible.builtin.raw: "apt-get install -y {{ package_to_install }}"
+      when: pkg_install_check.rc == 1
+
+          
