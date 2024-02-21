@@ -4,10 +4,10 @@
   connection: local
   gather_facts: false
   vars:
-    - package_to_install: python3
+    package_to_install: git
   tasks: 
     - name: create container
-      incus_container:
+      incus_instance:
         name: mycontainer
         source: 
           type: image
@@ -17,16 +17,21 @@
           mode: "pull"
           allow_inconsistent: false
 
-    - name: "check if {{ package_to_install }} is installed in container"
-      delegate_to: mycontainer
-      ansible.builtin.raw: "dpkg -s {{ package_to_install }}"
-      register: pkg_install_check
-      failed_when: pkg_install_check.rc not in [0, 1]
-      changed_when: false
+    - block:
+      - name: "check if {{ package_to_install }} is installed in container"
+        ansible.builtin.raw: "dpkg -s {{ package_to_install }}"
+        register: pkg_install_check
+        failed_when: pkg_install_check.rc not in [0, 1]
+        changed_when: false
 
-    - name: "install {{ package_to_install }} in container"
+      - name: "install {{ package_to_install }} in container"
+        ansible.builtin.raw: "apt-get install -y {{ package_to_install }}"
+        when: pkg_install_check.rc == 1
+
+      - name: use apt to install neovim
+        ansible.builtin.apt:
+          pkg:
+            - neovim
       delegate_to: mycontainer
-      ansible.builtin.raw: "apt-get install -y {{ package_to_install }}"
-      when: pkg_install_check.rc == 1
 
           
