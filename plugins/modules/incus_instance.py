@@ -11,7 +11,7 @@ __metaclass__ = type
 
 DOCUMENTATION = '''
 ---
-module: incus_container
+module: incus_instance
 short_description: Manage Incus instances
 description:
   - Management of Incus containers and virtual machines.
@@ -133,7 +133,7 @@ options:
         version_added: 4.1.0
     wait_for_ipv4_addresses:
         description:
-          - If this is V(true), the C(incus_container) waits until IPv4 addresses
+          - If this is V(true), the C(incus_instance) waits until IPv4 addresses
             are set to the all network interfaces in the instance after
             starting or restarting.
         required: false
@@ -148,7 +148,7 @@ options:
         version_added: 4.4.0
     force_stop:
         description:
-          - If this is V(true), the C(incus_container) forces to stop the instance
+          - If this is V(true), the C(incus_instance) forces to stop the instance
             when it stops or restarts the instance.
         required: false
         default: false
@@ -207,7 +207,7 @@ EXAMPLES = '''
   connection: local
   tasks:
     - name: Create a started container
-      community.general.incus_container:
+      community.general.incus_instance:
         name: mycontainer
         ignore_volatile_options: true
         state: started
@@ -241,7 +241,7 @@ EXAMPLES = '''
   connection: local
   tasks:
     - name: Create a started container
-      community.general.incus_container:
+      community.general.incus_instance:
         name: mycontainer
         ignore_volatile_options: true
         state: started
@@ -263,7 +263,7 @@ EXAMPLES = '''
   connection: local
   tasks:
     - name: Create a started container in project mytestproject
-      community.general.incus_container:
+      community.general.incus_instance:
         name: mycontainer
         project: mytestproject
         ignore_volatile_options: true
@@ -283,7 +283,7 @@ EXAMPLES = '''
   connection: local
   tasks:
     - name: Delete a container
-      community.general.incus_container:
+      community.general.incus_instance:
         name: mycontainer
         state: absent
         type: container
@@ -293,7 +293,7 @@ EXAMPLES = '''
   connection: local
   tasks:
     - name: Restart a container
-      community.general.incus_container:
+      community.general.incus_instance:
         name: mycontainer
         state: restarted
         type: container
@@ -303,7 +303,7 @@ EXAMPLES = '''
   connection: local
   tasks:
     - name: Restart a container
-      community.general.incus_container:
+      community.general.incus_instance:
         url: https://127.0.0.1:8443
         # These client_cert and client_key values are equal to the default values.
         #client_cert: "{{ lookup('env', 'HOME') }}/.config/lxc/client.crt"
@@ -334,7 +334,7 @@ EXAMPLES = '''
 - hosts: node01.example.com
   tasks:
     - name: Create Incus container
-      community.general.incus_container:
+      community.general.incus_instance:
         name: new-container-1
         ignore_volatile_options: true
         state: started
@@ -345,7 +345,7 @@ EXAMPLES = '''
         target: node01
 
     - name: Create container on another node
-      community.general.incus_container:
+      community.general.incus_instance:
         name: new-container-2
         ignore_volatile_options: true
         state: started
@@ -360,7 +360,7 @@ EXAMPLES = '''
   connection: local
   tasks:
     - name: Create container on another node
-      community.general.incus_container:
+      community.general.incus_instance:
         name: new-vm-1
         type: virtual-machine
         state: started
