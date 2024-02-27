@@ -14,7 +14,7 @@ All licenses and copyrights are kept for now.
 Since the supplied `ansible.cfg` changes `home` to `./` it should be possible to run with the following.
 
 ```shell
-# install a virtual environment if you want/need
+# install and activate a virtual environment if you want/need
 python3 -m venv venv
 . venv/bin/activate
 

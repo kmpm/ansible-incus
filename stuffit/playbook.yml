@@ -7,7 +7,7 @@
     package_to_install: git
   tasks: 
     - name: create container
-      incus_instance:
+      kmpm.linuxcontainers.incus_instance:
         name: mycontainer
         source: 
           type: image
@@ -35,7 +35,7 @@
       delegate_to: mycontainer
 
     - name: destroy container
-      incus_instance:
+      kmpm.linuxcontainers.incus_instance:
         name: mycontainer
         state: absent
           

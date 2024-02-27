@@ -1,0 +1,3 @@
+plugin: incus
+#url: unix:/var/lib/incus/unix.socket
+#state: RUNNING

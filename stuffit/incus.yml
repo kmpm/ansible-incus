@@ -1,0 +1,15 @@
+plugin: kmpm.general.incus
+# url: unix:/var/lib/incus/unix.socket
+# state: RUNNING
+
+
+groupby:
+  typeVM:
+    type: type
+    attribute: virtual-machine
+  typeContainer:
+    type: type
+    attribute: container
+  osDebian:
+    type: os
+    attribute: debian
