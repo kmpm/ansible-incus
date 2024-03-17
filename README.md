@@ -1,6 +1,8 @@
 # Ansible Incus
 This is a small project for developing [Incus](https://linuxcontainers.org) plugins for [Ansible](https://ansible.com).
 
+__NOTE!!!__: All development here is halted and moved to https://github.com/kmpm/ansible-collection-incus
+
 These are based/forked from work in the module 
 [lxd_container](https://github.com/ansible-collections/community.general/blob/main/plugins/modules/lxd_container.py),
 [Issue 7853](https://github.com/ansible-collections/community.generalissues/7853) 
